@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="gamesc.css">
+  <title>Typing Speed Test</title>
+</head>
+
+<body>
+
+  <!-- Top Section -->
+  <div class="top-bar">
+    <div class="score">Score: 0</div>
+    <div class="time">00:00</div>
+
+    <!-- Music toggle (moved to top-right) -->
+    <div class="music-wrap" aria-live="polite">
+      <button class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Toggle music">
+        Music: Off
+      </button>
+      <div id="musicHint" class="music-hint" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- Middle Section -->
+  <div class="center">
+    <div class="words" id="words">Starting...</div>
+    <input type="text" id="input" class="input-box" placeholder="Type here...">
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="bottom-bar">
+    <button class="menu-btn">Back to Main Menu</button>
+  </div>
+
+  <!-- Add music.js BEFORE gamesc.js -->
+  <script src="music.js"></script>
+  <script type="module" src="gamesc.js"></script>
+</body>
+
+</html>

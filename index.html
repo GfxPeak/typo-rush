@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="index.css">
+  <title>Typo Rush - Home</title>
+</head>
+
+<body>
+ <body>
+  <!-- Loading Screen - ADD THIS -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Background -->
+  <img src="index.png" alt="neon clouds background" class="bg-img" />
+  <div class="overlay"></div>
+  <!-- Title -->
+  <div class="title">Typo Rush</div>
+
+  <!-- Music toggle + hint -->
+  <div class="music-wrap" aria-live="polite">
+    <button class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Toggle music">
+      Music: Off
+    </button>
+    <div id="musicHint" class="music-hint" aria-hidden="true">UNMUTE SOUND</div>
+  </div>
+
+  <!-- Main center area -->
+  <div class="center-area" role="main" aria-label="Main menu">
+    <div class="buttons" aria-hidden="false">
+      <button id="startBtn">Start</button>
+      <button id="leaderboardBtn">Leaderboard</button>
+      <button id="quitBtn">Quit</button>
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline-box" aria-hidden="false">
+      <div class="line">Type Fast, Beat The Clock!</div>
+    </div>
+  </div>
+
+  <!-- Username input (hidden until Start clicked) -->
+  <div class="username-box" id="usernameBox" aria-live="polite">
+    <input id="usernameInput" type="text" placeholder="Enter your name" aria-label="Your name">
+    <button class="go" id="goBtn">Go</button>
+  </div>
+
+  <!-- scripts: music.js could be omitted; this file contains all music logic -->
+   <script src="music.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
+ 

@@ -1,0 +1,471 @@
+* {
+    box-sizing: border-box
+}
+/* ===== LOADING SCREEN ===== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(11,12,20,0.95) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.loading-overlay.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  font-family: 'SuperPixel', sans-serif;
+}
+
+.loader-text {
+  font-size: 1.2rem;
+  color: #e2d1d9;
+  text-shadow:
+    0 0 4px rgba(187,24,113,0.9),
+    0 0 10px rgba(180,0,255,0.35);
+  letter-spacing: 2px;
+}
+
+.loader-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(145,2,85, 0.2);
+  border-top-color: #ffb3ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 12px #ffb3ff, 0 0 24px rgba(180,0,255,0.5);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Blurred background */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("optsc.jpg") no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(1px);
+    z-index: -1;
+}
+
+@font-face {
+    font-family: 'SuperPixel';
+    src: url('./fonts/super-pixel-font/SuperPixel-m2L8j.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Title stays at top */
+h1 {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(45px, 5.5vw, 72px);
+    font-weight: bolder;
+    letter-spacing: 4px;
+    text-align: center;
+    z-index: 2;
+    font-family: 'SuperPixel';
+    color: #dacdd3;
+    text-shadow: 0 0 8px rgba(187, 24, 113, 0.9),
+        0 0 20px rgba(180, 0, 255, 0.35),
+        0 0 40px rgba(21, 1, 31, 0.2);
+    background: linear-gradient(180deg, rgba(145, 2, 85, 0.18), rgba(47, 13, 87, 0.28));
+    border-radius: 25px;
+}
+
+/* Buttons in center */
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    /* spacing between buttons */
+    height: 100vh;
+    z-index: 2;
+    transform: translateY(40px);
+}
+
+
+/* Buttons style */
+button {
+    background: linear-gradient(180deg, rgba(145, 2, 85, 0.18), rgba(47, 13, 87, 0.28));
+     border: none;
+     outline: none;
+     color: #fff;
+     margin-top: 15px;
+     width: 190px;
+     font-size: 1rem;
+     font-weight: bolder;
+     padding: 23px 35px;
+     border-radius: 14px;
+     cursor: pointer;
+     transition: 0.3s ease;
+     box-shadow: 0 0 10px rgba(196, 78, 255, 0.3);
+     animation: float 3s ease-in-out infinite;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #7223bb, #9426a5);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(201, 14, 230, 0.9);
+}
+
+/* Optional top bar (if you use it) */
+.top-bar {
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Back button */
+.back-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2;
+    background: linear-gradient(180deg, rgba(145, 2, 85, 0.18), rgba(47, 13, 87, 0.28));
+    border: none;
+    outline: none;
+    width: 230px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 13px 30px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px rgba(196, 78, 255, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+.back-btn:hover {
+    background: linear-gradient(90deg, #7223bb, #9426a5);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(201, 14, 230, 0.9);
+}
+
+/*Music Button*/
+.music-btn {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    z-index: 3;
+    background: linear-gradient(180deg, rgba(145, 2, 85, 0.18), rgba(47, 13, 87, 0.28));
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 13px 25px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px rgba(196, 78, 255, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Hover effect */
+.music-btn:hover {
+    background: linear-gradient(90deg, #7223bb, #9426a5);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(201, 14, 230, 0.9);
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/*responsiveness*/
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  body {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    text-align: center;
+    padding-right: 0;
+    margin-left: 0;
+  }
+
+  .leaderboard-container {
+    justify-content: center;
+    padding-right: 0;
+    margin-left: 0;
+  }
+
+  .leaderboard-box {
+    width: 80%;
+    padding: 25px 30px;
+  }
+
+  .back-btn {
+    margin-right: 0;
+align-self: center;
+  }
+}
+
+/* Phones (max-width: 768px) */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    overflow-y: auto;
+  }
+
+  .title {
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 15px;
+  }
+
+  .leaderboard-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+.leaderboard-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .top-player {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+
+  .player-list li {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .back-btn {
+    margin-top: 20px;
+    margin-right: 0;
+    font-size: 1rem;
+  }
+}
+
+/* Small phones (max-width: 480px) */
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+    margin-top: 25px;
+ }
+
+  .leaderboard-box {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .leaderboard-title {
+    font-size: 1.4rem;
+  }
+
+  .top-player {
+    font-size: 0.9rem;
+  }
+
+  .player-list li {
+    font-size: 0.85rem;
+  }
+
+  .back-btn {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
+
+
+/* Panel styling for Game Modes / Rules */
+.panel {
+  position: absolute;
+  bottom: 14%;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  width: 75%;
+  max-width: 720px;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(145, 2, 85, 0.2), rgba(47, 13, 87, 0.35));
+  box-shadow: 0 0 25px rgba(187, 24, 113, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 10;
+}
+
+.panel.active {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: all;
+  animation: slideUp 0.5s ease forwards;
+}
+
+/* Slide-in animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translate(-50%, 40px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Panel content text and layout */
+.panel-content h2 {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  text-shadow: 0 0 8px rgba(187, 24, 113, 0.8);
+}
+
+.panel-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 10px 0;
+  color: #e2d1d9;
+}
+
+/* Mode option buttons */
+.mode-option {
+  display: inline-block;
+  margin: 10px 15px;
+  padding: 15px 25px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  background: linear-gradient(180deg, rgba(182, 3, 107, 0.25), rgba(73, 25, 128, 0.35));
+  box-shadow: 0 0 10px rgba(187, 24, 113, 0.3);
+  transition: all 0.25s ease;
+}
+
+.mode-option:hover {
+  transform: scale(1.08);
+  background: linear-gradient(90deg, #7223bb, #9426a5);
+  box-shadow: 0 0 25px rgba(201, 14, 230, 0.9);
+}
+
+/* Close (X) button */
+/* Close (X) Button */
+/* Close (X) Button - compact and fixed */
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  z-index: 10;
+  background: none !important;
+  border: none !important;
+  color: #fff;
+  font-size: 1.3rem !important; /* small size */
+  font-weight: 900;
+  line-height: 1;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  cursor: pointer;
+  text-shadow: 0 0 8px rgba(187, 24, 113, 0.9),
+               0 0 20px rgba(180, 0, 255, 0.35),
+               0 0 40px rgba(21, 1, 31, 0.2);
+  transition: transform 0.25s ease, color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #ff66cc;
+  transform: scale(1.2);
+}
+
+.close-btn {
+  opacity: 0;
+  animation: fadeInClose 0.4s ease forwards;
+}
+
+@keyframes fadeInClose {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+/* Moves the Typo Rush title upward smoothly */
+h1.move-up {
+  transform: translate(-50%, -45px); /* go up but stay centered */
+  transition: transform 0.8s ease-in-out; /* slower and smoother */
+}
+
+
+/* default smooth transition back when class removed */
+h1 {
+  transition: transform 0.8s ease-in-out;
+}

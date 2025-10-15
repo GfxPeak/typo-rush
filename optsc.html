@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typo Rush - Options</title>
+  <link rel="stylesheet" href="optsc.css">
+</head>
+
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Music toggle + hint (matching home page) -->
+  <div class="music-wrap" aria-live="polite">
+    <button class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Toggle music">
+      Music: Off
+    </button>
+    <div id="musicHint" class="music-hint" aria-hidden="true"></div>
+  </div>
+
+  <!-- Title -->
+  <h1>Typo Rush</h1>
+
+  <!-- Main Container -->
+  <div class="container" id="mainContainer">
+    <button id="modesBtn">Game Modes</button>
+    <button id="rulesBtn">Rules</button>
+  </div>
+
+  <!-- Hidden Panel (for Modes or Rules) -->
+  <div class="panel" id="infoPanel">
+    <button class="close-btn" id="closePanel">✖</button>
+    <div class="panel-content" id="panelContent"></div>
+  </div>
+
+  <!-- Back Button -->
+  <button class="back-btn" id="backBtn">Back to Main Menu</button>
+
+  <!-- Scripts -->
+  <script src="music.js"></script>
+  <script src="optsc.js"></script>
+</body>
+</html>

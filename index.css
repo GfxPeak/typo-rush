@@ -1,0 +1,365 @@
+/* ===== FONT IMPORTS (keep your font files in same paths) ===== */
+/* ===== LOADING SCREEN ===== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(11,12,20,0.95) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.loading-overlay.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  font-family: 'SuperPixel', sans-serif;
+}
+
+.loader-text {
+  font-size: 1.2rem;
+  color: #e2d1d9;
+  text-shadow:
+    0 0 4px rgba(187,24,113,0.9),
+    0 0 10px rgba(180,0,255,0.35);
+  letter-spacing: 2px;
+}
+
+.loader-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(145,2,85, 0.2);
+  border-top-color: #ffb3ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 12px #ffb3ff, 0 0 24px rgba(180,0,255,0.5);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== FONT IMPORTS (keep your font files in same paths) ===== */
+/* rest of your existing CSS continues here */
+@font-face {
+  font-family: 'SuperPixel';
+  src: url('./fonts/super-pixel-font/SuperPixel-m2L8j.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BeatWordDemo';
+  src: url('./fonts/beat-word-font/BeatWordDemo-nRL20.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ===== BASE STYLING ===== */
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  color: #fff;
+  background: url("index.png") no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* ===== BACKGROUND + OVERLAY ===== */
+.bg-img {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -3;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.6) 100%);
+  z-index: -2;
+}
+
+/* ===== TITLE ===== */
+.title {
+  position: absolute;
+  top: 16%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(40px, 5vw, 72px); /* slightly more flexible scaling */
+  font-weight: bolder;
+  letter-spacing: 4px;
+  text-align: center;
+  z-index: 2;
+  padding: 7px 18px;
+  border-radius: 25px;
+  background: linear-gradient(180deg, rgba(145,2,85,0.18), rgba(47,13,87,0.28));
+  border: 1px solid rgba(0,0,0,0.2);
+  font-family: 'SuperPixel';
+  color: #e2d1d9;
+  text-shadow:
+    0 0 8px rgba(187,24,113,0.9),
+    0 0 20px rgba(180,0,255,0.35),
+    0 0 40px rgba(21,1,31,0.2);
+  transition: all 0.3s ease; /* smooth scaling */
+}
+
+
+/* ===== MAIN CENTER AREA ===== */
+.center-area {
+  position: absolute;
+  left: 50%;
+  top: 60%; /* slightly higher to prevent early overlap */
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(90%, 1200px);
+  gap: 20%;
+  padding: 18px;
+  transition: top 0.3s ease;
+}
+
+
+/* ===== BUTTONS ===== */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  min-width: 220px;
+}
+
+.buttons button {
+  background: linear-gradient(180deg, rgba(145,2,85,0.18), rgba(47,13,87,0.28));
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 13px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 0 10px rgba(196,78,255,0.3);
+  animation: float 3s ease-in-out infinite;
+}
+
+.buttons button:hover {
+  background: linear-gradient(90deg, #7223bb, #9426a5);
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(201,14,230,0.9);
+}
+
+/* ===== TAGLINE ===== */
+.tagline-box {
+  margin-top: 20px;
+  font-family: 'BeatWordDemo';
+  min-width: 300px;
+  max-width: 520px;
+  padding: 20px 28px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(145,2,85,0.18), rgba(47,13,87,0.28));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 6px 40px rgba(11,12,20,0.6);
+  color: #e2d1d9;
+  text-shadow:
+    0 0 8px rgba(187,24,113,0.9),
+    0 0 20px rgba(180,0,255,0.35),
+    0 0 40px rgba(21,1,31,0.2);
+}
+
+.tagline-box .line {
+  display: inline-block;
+  font-size: clamp(18px, 2.4vw, 28px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #e2d1d9;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* ===== TAGLINE ANIMATION (keeps your feel) ===== */
+.line span { display:inline-block; animation: snakeWave 1.6s ease-in-out infinite; }
+.line span:nth-child(1){animation-delay:0s} .line span:nth-child(2){animation-delay:0.06s}
+.line span:nth-child(3){animation-delay:0.12s} .line span:nth-child(4){animation-delay:0.18s}
+.line span:nth-child(5){animation-delay:0.24s} .line span:nth-child(6){animation-delay:0.30s}
+.line span:nth-child(7){animation-delay:0.36s} .line span:nth-child(8){animation-delay:0.42s}
+.line span:nth-child(9){animation-delay:0.48s} .line span:nth-child(10){animation-delay:0.54s}
+.line span:nth-child(11){animation-delay:0.60s} .line span:nth-child(12){animation-delay:0.66s}
+.line span:nth-child(13){animation-delay:0.72s} .line span:nth-child(14){animation-delay:0.78s}
+.line span:nth-child(15){animation-delay:0.84s} .line span:nth-child(16){animation-delay:0.9s}
+
+@keyframes snakeWave { 0%,100%{transform:translateY(0)}25%{transform:translateY(-5px)}50%{transform:translateY(0)}75%{transform:translateY(5px)} }
+
+/* ===== USERNAME INPUT BOX ===== */
+.username-box {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 170px);
+  transform: translateX(-50%);
+  z-index: 2;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(145,2,85,0.18), rgba(47,13,87,0.28));
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.username-box input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  width: 260px;
+  text-align: center;
+}
+
+.username-box .go {
+  padding: 10px 14px;
+  margin-left: 8px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(90deg, rgba(145,5,98,0.95), rgba(92,24,121,0.9));
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== MUSIC BUTTON ===== */
+.music-wrap { position: absolute; right: 18px; top: 12px; z-index: 6; text-align: center; }
+.music-btn {
+  background: linear-gradient(180deg, rgba(145,2,85,0.18), rgba(47,13,87,0.28));
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 13px 26px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow: 0 0 10px rgba(196,78,255,0.3);
+}
+.music-btn:hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(201,14,230,0.9); }
+
+/* ===== BLINKING HINT WHEN OFF ===== */
+.music-hint {
+  margin-top: 8px;
+  display: none;
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: #ffb3ff;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-shadow: 0 0 6px rgba(255,0,128,0.8);
+  box-shadow: 0 0 12px rgba(255,100,220,0.25);
+  pointer-events: none;
+}
+
+/* blinking + glow */
+.music-hint.show {
+  display: inline-block;
+  animation: blinkGlow 1s steps(2, start) infinite, pulseGlow 1.6s ease-in-out infinite;
+}
+
+/* fast blink + soft pulse */
+@keyframes blinkGlow {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 8px rgba(255,100,220,0.3); transform: translateY(0); }
+  50% { box-shadow: 0 0 18px rgba(255,100,220,0.6); transform: translateY(-2px); }
+  100% { box-shadow: 0 0 8px rgba(255,100,220,0.3); transform: translateY(0); }
+}
+
+/* ===== FLOAT ANIMATION (existing) ===== */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1024px) {
+  .title {
+    top: 14%;
+    font-size: clamp(34px, 5vw, 58px);
+  }
+
+  .center-area {
+    top: 52%;
+  }
+}
+@media (max-width: 720px) {
+  .title {
+    top: 12%; /* move title up slightly */
+    font-size: clamp(28px, 6vw, 46px);
+    padding: 6px 14px;
+  }
+
+  .center-area {
+    top: 68%; /* push buttons lower */
+    gap: 20px;
+  }
+
+  .buttons button {
+    width: 80vw;
+    max-width: 300px;
+  }
+
+  .tagline-box {
+    width: 80vw;
+    max-width: 420px;
+  }
+
+  .music-wrap {
+    right: 12px;
+    top: 10px;
+  }
+
+  .username-box {
+    top: calc(50% + 220px);
+  }
+}
+@media (max-width: 480px) {
+  .title {
+    top: 10%;
+    font-size: clamp(24px, 7vw, 38px);
+  }
+
+  .center-area {
+    top: 52%;
+  }
+}

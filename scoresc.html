@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="scoresc.css">
+  <title>Typing Test Results</title>
+</head>
+<body>
+  <!-- Music toggle + hint (matching optsc pattern) -->
+  <div class="music-wrap" aria-live="polite">
+    <button class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Toggle music">
+      Music: Off
+    </button>
+    <div id="musicHint" class="music-hint" aria-hidden="true"></div>
+  </div>
+
+  <h1>Typing Scoreboard</h1>
+  <p>Here's how fast and accurate you were</p>
+
+  <div class="stats">
+    <div class="card">
+      <h2>50</h2>
+      <p>Total Words</p>
+    </div>
+    <div class="card">
+      <h2>5</h2>
+      <p>Wrong</p>
+    </div>
+    <div class="card">
+      <h2>90%</h2>
+      <p>Final Score</p>
+    </div>
+    <div class="card">
+      <h2>45</h2>
+      <p>Typing Speed</p>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button id="restartBtn">Restart Game</button>
+    <button id="leaderboardBtn">Leaderboard</button>
+    <button id="menuBtn">Back to Main Menu</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="music.js"></script>
+  <script src="scoresc.js"></script>
+</body>
+</html>

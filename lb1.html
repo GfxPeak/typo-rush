@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaderboard | Typo Rush</title>
+  <link rel="stylesheet" href="lb1.css">
+</head>
+<body>
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="title">Leaderboard</div>
+  </div>
+
+  <!-- Music toggle button (top right) -->
+  <div class="music-wrap" aria-live="polite">
+    <button class="music-btn" id="musicToggle" aria-pressed="false" aria-label="Toggle music">
+      Music: Off
+    </button>
+    <div id="musicHint" class="music-hint" aria-hidden="true"></div>
+  </div>
+
+  <!-- Leaderboard section -->
+  <div class="leaderboard-container">
+    <div class="leaderboard-box">
+      <h2 class="leaderboard-title">Top Player</h2>
+      <div class="top-player">
+        <span class="player-name">Loading...</span>
+        <span class="player-score">-- LPS</span>
+      </div>
+      <hr class="divider">
+      <ul class="player-list"></ul>
+    </div>
+  </div>
+
+  <button class="back-btn">Back to Main Menu</button>
+
+  <!-- Scripts -->
+  <script src="music.js"></script>
+
+  <!-- Firebase Config -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhCg2BMWcPgc44snQs9o5coDUEwIZyZjI",
+      authDomain: "typo-rush-3551b.firebaseapp.com",
+      projectId: "typo-rush-3551b",
+      storageBucket: "typo-rush-3551b.firebasestorage.app",
+      messagingSenderId: "769554999839",
+      appId: "1:769554999839:web:8cd7f9b73040c9546bc32a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.db = getFirestore(app);
+  </script>
+
+  <!-- Leaderboard JS -->
+  <script type="module" src="lb1.js"></script>
+</body>
+</html>
