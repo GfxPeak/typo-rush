@@ -1,4 +1,3 @@
-// Elements
 // ===== PRELOADER =====
 window.addEventListener('load', () => {
   const loadingOverlay = document.getElementById('loadingOverlay');
@@ -48,7 +47,7 @@ window.addEventListener('load', () => {
     checkAllLoaded();
   }
 });
-
+// Elements
 const musicToggle = document.getElementById('musicToggle');
 const musicHint = document.getElementById('musicHint');
 const backBtn = document.getElementById('backBtn');
@@ -115,18 +114,16 @@ modesBtn.addEventListener('click', () => {
     });
 
     btn.addEventListener('click', () => {
-      if (window.musicController) window.musicController.playClick();
+    if (window.musicController) window.musicController.playClick();
 
-      const mode = btn.dataset.mode;
-      localStorage.setItem('selectedMode', mode);
-      panelContent.innerHTML = `<h3>✅ ${btn.textContent} Selected!</h3>`;
+    const mode = btn.dataset.mode;
+    localStorage.setItem('selectedMode', mode);
+    panelContent.innerHTML = `<h3>${btn.textContent} Selected!</h3>`;
 
-      // fade music before starting
-      if (window.musicController) window.musicController.stopMusicForGame();
-
-     setTimeout(() => (window.location.href = 'gamesc.html'), 1000);
-    });
+    // Go to the game screen
+    setTimeout(() => (window.location.href = 'gamesc.html'), 1000);
   });
+});
 
 });
 
