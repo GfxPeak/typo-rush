@@ -1,11 +1,85 @@
-// ===================== TYPO RUSH GAME LOGIC (Firebase + Conquest Mode with 2 wrongs) =====================
+// ===================== TYPO RUSH GAME LOGIC - FIXED VERSION =====================
 
+// ===== PRELOADER - IMPROVED =====
+(function() {
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  
+  if (!loadingOverlay) return;
+
+  const assetsToLoad = [
+    'gamesc.png',
+    './fonts/super-pixel-font/SuperPixel-m2L8j.ttf',
+    './fonts/digital-7-font/Digital7-rg1mL.ttf'
+  ];
+
+  let loadedCount = 0;
+  const totalAssets = assetsToLoad.length;
+  let hideTimeout = null;
+
+  function checkAllLoaded() {
+    loadedCount++;
+    console.log(`Loaded ${loadedCount}/${totalAssets} assets`);
+    
+    if (loadedCount >= totalAssets) {
+      // Clear any existing timeout
+      if (hideTimeout) clearTimeout(hideTimeout);
+      
+      // Hide after small delay
+      hideTimeout = setTimeout(() => {
+        if (loadingOverlay) {
+          loadingOverlay.classList.add('loaded');
+        }
+      }, 300);
+    }
+  }
+
+  // Preload background image
+  const img = new Image();
+  img.onload = checkAllLoaded;
+  img.onerror = checkAllLoaded;
+  img.src = assetsToLoad[0];
+
+  // Preload fonts
+  if (document.fonts) {
+    Promise.all([
+      document.fonts.load('1em SuperPixel'),
+      document.fonts.load('1em Digital7')
+    ]).then(() => {
+      checkAllLoaded();
+      checkAllLoaded();
+    }).catch(() => {
+      checkAllLoaded();
+      checkAllLoaded();
+    });
+  } else {
+    checkAllLoaded();
+    checkAllLoaded();
+  }
+
+  // Fallback: hide loader after 3 seconds regardless
+  setTimeout(() => {
+    if (loadingOverlay && !loadingOverlay.classList.contains('loaded')) {
+      console.log('Fallback: hiding loader');
+      loadingOverlay.classList.add('loaded');
+    }
+  }, 3000);
+})();
+
+// ===== MAIN GAME LOGIC =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // ===== MUSIC HANDLING =====
   
+  const correctBeep = new Audio("music/correct_beep.mp3");
+  const wrongBeep = new Audio("music/wrong_beep.mp3");
+  const gameOverSound = new Audio("music/gameoverfinal.mp3");
+  
+  correctBeep.volume = 0.7;
+  wrongBeep.volume = 0.7;
+  gameOverSound.volume = 1;
+
   // Stop background music when game starts
   if (window.musicController) {
     window.musicController.stopMusicForGame();
@@ -14,22 +88,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Get selected mode
   const selectedMode = localStorage.getItem("selectedMode") || "time";
   
-  // Create mode-specific music
-  let gameMusicAudio = null;
-  let musicFile = '';
-  
-  if (selectedMode === 'survival') {
-    musicFile = 'music/survivalmode_song.mp3';
-  } else if (selectedMode === 'conquest') {
-    musicFile = 'music/conquestmode_song.mp3';
-  } else {
-    musicFile = 'music/attackmode_song.mp3';
+  // Switch to mode-specific music
+  if (window.musicController) {
+    let musicFile = '';
+    
+    if (selectedMode === 'survival') {
+      musicFile = 'music/survivalmode_song.mp3';
+    } else if (selectedMode === 'conquest') {
+      musicFile = 'music/conquestmode_song.mp3';
+    } else {
+      musicFile = 'music/attackmode_song.mp3';
+    }
+    
+    window.musicController.changeTrack(musicFile);
   }
-  
-  gameMusicAudio = new Audio(musicFile);
-  gameMusicAudio.loop = true;
-  gameMusicAudio.volume = 0.5;
-  gameMusicAudio.play().catch(err => console.log('Music play failed:', err));
 
   // --- Initialize Firebase ---
   const firebaseConfig = {
@@ -63,9 +135,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   let gameStartedAt = null;
   let isSubmitting = false;
 
-  // Conquest mode specific variables
-  let wrongsLeft = 2; // Total wrongs allowed in conquest mode
-  let consecutiveCorrect = 0; // Track consecutive correct words
+  let wrongsLeft = 2;
+  let consecutiveCorrect = 0;
 
   // --- Load words from Firestore ---
   async function loadWordsFromFirebase() {
@@ -84,25 +155,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // --- Mode & Player Info ---
   const playerName = localStorage.getItem("username") || localStorage.getItem("playerName") || "Player";
 
-  // Initialize time based on mode
   if (selectedMode === "survival") time = 30;
-  else if (selectedMode === "conquest") time = 5;  // Start with 5 seconds for conquest
-  else time = 60; // time attack default
+  else if (selectedMode === "conquest") time = 5;
+  else time = 60;
 
   // --- Utility Functions ---
   function updateDisplays() {
     scoreDisplay.textContent = `Score: ${score}`;
     
-    // Format time as digital clock (MM:SS)
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     timeDisplay.textContent = formattedTime;
     
-    // Update wrongs left display for conquest mode
     if (selectedMode === "conquest") {
       const wrongsDisplay = document.querySelector(".wrongs-left");
       if (wrongsDisplay) {
@@ -111,13 +178,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // Show +1 animation when wrongs are recovered
   function showRecoveryAnimation() {
     const recoveryEl = document.createElement('div');
     recoveryEl.className = 'recovery-animation';
     recoveryEl.textContent = '+1 Wrong Recovered!';
-    document.body.appendChild(recoveryEl);
     
+    document.body.appendChild(recoveryEl);
+
     setTimeout(() => {
       recoveryEl.remove();
     }, 2000);
@@ -153,25 +220,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       time--;
       updateDisplays();
       if (time <= 0) {
-        endGame(selectedMode === "survival" ? "💀 Time's up in Survival!" : "⏳ Time's up!");
+        endGame(selectedMode === "survival" ? "Time's up in Survival!" : "Time's up!");
       }
     }, 1000);
   }
 
   function ensureConquestTimer() {
-    // for conquest mode we may start interval only after first +time
     if (!timer) {
       timer = setInterval(() => {
         time--;
         updateDisplays();
         if (time <= 0) {
-          endGame("⏳ Time's up in Conquest Mode!");
+          endGame("Time's up in Conquest Mode!");
         }
       }, 1000);
     }
   }
 
-  // --- Get a new random word (no repeats) ---
   function getUniqueRandomWord() {
     if (usedWords.length === wordsList.length) usedWords = [];
     let word;
@@ -209,36 +274,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     const typedTrim = typed.trim();
     const currentTrim = currentWord.trim();
     const isExact = typedTrim === currentTrim;
-    
+
+    if (isExact) {
+      correctBeep.currentTime = 0;
+      correctBeep.play().catch(() => {});
+    } else {
+      wrongBeep.currentTime = 0;
+      wrongBeep.play().catch(() => {});
+    }
+
     if (!isExact) wrongs++;
 
     renderWordWithColors(currentWord, typed);
 
-    // Mode-specific effects
     if (selectedMode === "conquest") {
       if (isExact) {
-        // add time and ensure timer started
         time += 5;
         consecutiveCorrect++;
         
-        // Check if 5 consecutive correct and there were wrongs before
         if (consecutiveCorrect >= 5 && wrongsLeft < 2) {
-          wrongsLeft = Math.min(wrongsLeft + 1, 2); // Cap at 2
-          consecutiveCorrect = 0; // Reset counter
+          wrongsLeft = Math.min(wrongsLeft + 1, 2);
+          consecutiveCorrect = 0;
           showRecoveryAnimation();
         }
         
         updateDisplays();
         ensureConquestTimer();
       } else {
-        // wrong in conquest
-        consecutiveCorrect = 0; // Reset consecutive counter
+        consecutiveCorrect = 0;
         wrongsLeft--;
         updateDisplays();
         
         if (wrongsLeft <= 0) {
-          // small delay for player to see red
-          setTimeout(() => endGame("💀 No more wrongs left in Conquest Mode!"), 450);
+          setTimeout(() => endGame("No more wrongs left in Conquest Mode!"), 450);
           return;
         }
       }
@@ -248,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (time < 0) time = 0;
         updateDisplays();
         if (time <= 0) {
-          setTimeout(() => endGame("💀 You lost all time in Survival!"), 450);
+          setTimeout(() => endGame("You lost all time in Survival!"), 450);
           return;
         }
       }
@@ -263,22 +331,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 400);
   }
 
-  // --- End Game ---
   async function endGame(message = "Game Over!") {
     clearInterval(timer);
     timer = null;
     inputBox.disabled = true;
-    
-    // Stop mode-specific music
-    if (gameMusicAudio) {
-      gameMusicAudio.pause();
-      gameMusicAudio.currentTime = 0;
+
+    // 🔇 CRITICAL FIX: Stop all background music IMMEDIATELY
+    if (window.musicController && window.musicController.stopMusicHard) {
+      window.musicController.stopMusicHard();
     }
-    
+
+    // Small delay to ensure music stops before game over sound
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // 🎵 Play Game Over sound
+    try {
+      gameOverSound.pause();
+      gameOverSound.currentTime = 0;
+      await gameOverSound.play();
+    } catch (err) {
+      console.warn("Game Over sound failed:", err);
+    }
+
+    // Show "Game Over" text
+    wordsDisplay.textContent = `${message} Final Score: ${score}`;
+
+    // Save data
     const elapsedSec = Math.max(1, (Date.now() - (gameStartedAt || Date.now())) / 1000);
     const typingSpeed = (totalLettersTyped / elapsedSec).toFixed(2);
 
-    // save stats for scores screen
     localStorage.setItem("finalScore", score);
     localStorage.setItem("finalWrongs", wrongs);
     localStorage.setItem("finalWords", totalWords);
@@ -287,26 +368,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     localStorage.setItem("finalMode", selectedMode);
     localStorage.setItem("playerName", playerName);
 
-    // ✅ Save to Firestore leaderboard
-    try {
-      await addDoc(collection(db, "leaderboard"), {
-        name: playerName,
-        lps: parseFloat(typingSpeed)
-      });
-      console.log(`✅ Saved: ${playerName} - ${typingSpeed} LPS`);
-    } catch (error) {
-      console.error("❌ Error saving to leaderboard:", error);
-    }
+    // Save to leaderboard in background
+    addDoc(collection(db, "leaderboard"), {
+      name: playerName,
+      lps: parseFloat(typingSpeed)
+    }).catch((error) => {
+      console.error("Error saving to leaderboard:", error);
+    });
 
-    wordsDisplay.textContent = `${message} Final Score: ${score}`;
+    // Wait for game over sound to finish (1.2s)
     setTimeout(() => {
       window.location.href = "scoresc.html";
-    }, 900);
+    }, 1200);
   }
 
   // --- Start Game ---
   function startGame() {
-    // Show wrongs left only in conquest mode
     if (selectedMode === "conquest") {
       document.body.setAttribute('data-mode', 'conquest');
       const wrongsDisplay = document.querySelector('.wrongs-left');
@@ -319,12 +396,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     inputBox.disabled = false;
     inputBox.focus();
     nextWord();
-    
-    // Start timer for non-conquest modes
+
     if (selectedMode !== "conquest") {
       startTimerIfNeeded();
     } else {
-      // For conquest mode, start the timer immediately since we have 5 seconds
       ensureConquestTimer();
     }
 
@@ -349,22 +424,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (confirm("Return to main menu? Progress will be lost.")) {
         clearInterval(timer);
         
-        // Stop mode-specific music
-        if (gameMusicAudio) {
-          gameMusicAudio.pause();
-          gameMusicAudio.currentTime = 0;
-        }
-        
-        // Resume menu music when going back
         if (window.musicController) {
+          window.musicController.stopMusicForGame();
           window.musicController.resumeMusicFromMenu();
         }
-        
-        window.location.href = "index.html";
+
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 150);
       }
     });
   }
 
-  // --- Load words and start ---
   await loadWordsFromFirebase();
 });
