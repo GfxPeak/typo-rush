@@ -1,5 +1,52 @@
 // scoresc.js — navigation + persistent music + stats
+window.addEventListener('load', () => {
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  
+  // List of assets to preload
+  const assetsToLoad = [
+    'scoresc.jpg', // Your background image
+    './fonts/super-pixel-font/SuperPixel-m2L8j.ttf',
+    './fonts/dropline-font/DroplineRegular-Wpegz.otf'
+  ];
 
+  let loadedCount = 0;
+  const totalAssets = assetsToLoad.length;
+
+  function checkAllLoaded() {
+    loadedCount++;
+    if (loadedCount >= totalAssets) {
+      setTimeout(() => {
+        if (loadingOverlay) {
+          loadingOverlay.classList.add('loaded');
+        }
+      }, 300);
+    }
+  }
+
+  // Preload background image
+  const img = new Image();
+  img.onload = checkAllLoaded;
+  img.onerror = checkAllLoaded; // Still hide loader even if image fails
+  img.src = assetsToLoad[0];
+
+  // Preload fonts
+  if (document.fonts) {
+    Promise.all([
+      document.fonts.load('1em SuperPixel'),
+      document.fonts.load('1em DroplineRegular')
+    ]).then(() => {
+      checkAllLoaded();
+      checkAllLoaded();
+    }).catch(() => {
+      checkAllLoaded();
+      checkAllLoaded();
+    });
+  } else {
+    // Fallback if Font Loading API not supported
+    checkAllLoaded();
+    checkAllLoaded();
+  }
+});
 // Elements
 const musicToggle = document.getElementById('musicToggle');
 const musicHint = document.getElementById('musicHint');
