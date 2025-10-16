@@ -9,11 +9,18 @@
 </head>
 
 <body>
-
+ <!-- Loading Screen - ADD THIS -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading...</div>
+    </div>
+  </div>
   <!-- Top Section -->
   <div class="top-bar">
     <div class="score">Score: 0</div>
     <div class="time">00:00</div>
+    <div class="wrongs-left" style="display:none;">Wrongs Left: 2</div>
 
     <!-- Music toggle (moved to top-right) -->
     <div class="music-wrap" aria-live="polite">
@@ -27,9 +34,18 @@
   <!-- Middle Section -->
   <div class="center">
     <div class="words" id="words">Starting...</div>
-    <input type="text" id="input" class="input-box" placeholder="Type here...">
+    <input 
+  type="text" 
+  id="input" 
+  class="input-box" 
+  placeholder="Type here..."
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="off"
+  spellcheck="false"
+>
   </div>
-
+  
   <!-- Bottom Section -->
   <div class="bottom-bar">
     <button class="menu-btn">Back to Main Menu</button>
