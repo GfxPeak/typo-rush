@@ -1,11 +1,11 @@
-// home.js — FIXED to work with music.js
+
 // ===== PRELOADER =====
 window.addEventListener('load', () => {
   const loadingOverlay = document.getElementById('loadingOverlay');
   
   // List of assets to preload
   const assetsToLoad = [
-    'index.png', // Your background image
+    'index.png', 
     './fonts/super-pixel-font/SuperPixel-m2L8j.ttf',
     './fonts/beat-word-font/BeatWordDemo-nRL20.ttf'
   ];
@@ -49,10 +49,8 @@ window.addEventListener('load', () => {
   }
 });
 
-// home.js — FIXED to work with music.js
+
 const startBtn = document.getElementById('startBtn');
-// rest of your existing code stays exactly the same
-// const startBtn = document.getElementById('startBtn');
 const leaderboardBtn = document.getElementById('leaderboardBtn');
 const quitBtn = document.getElementById('quitBtn');
 const musicToggle = document.getElementById('musicToggle');
@@ -78,7 +76,7 @@ function updateMusicHint() {
 
 // --- Custom toggle handler to update hint ---
 function handleMusicToggle() {
-  // The music.js already handles the toggle, we just update the hint
+
   setTimeout(updateMusicHint, 50); // Small delay to let music.js update first
 }
 
