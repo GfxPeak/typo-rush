@@ -1,7 +1,3 @@
-* {
-    box-sizing: border-box
-}
-/* ===== LOADING SCREEN ===== */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -53,6 +49,10 @@
   to { transform: rotate(360deg); }
 }
 
+
+* {
+    box-sizing: border-box
+}
 
 body {
     height: 100vh;
