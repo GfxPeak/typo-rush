@@ -1,4 +1,4 @@
-// music.js — background music + UI click/hover sounds 
+// music.js – Fixed version with proper music stopping
 (function () {
   const MUSIC_PATH = "music/mainbg.mp3";
   const TARGET_VOLUME = 0.45;
@@ -98,6 +98,40 @@
     hasStartedPlayback = true;
   }
 
+  // --- Change background track dynamically ---
+  function changeTrack(newPath) {
+    // Stop and clear any existing fade timers
+    if (fadeTimer) {
+      clearInterval(fadeTimer);
+      fadeTimer = null;
+    }
+
+    // Stop current music completely
+    if (bgMusic) {
+      try {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+      } catch (e) {}
+      bgMusic = null;
+    }
+
+    // Create new audio with new track
+    bgMusic = new Audio(newPath);
+    bgMusic.loop = true;
+    bgMusic.volume = 0;
+
+    // Only play if music is ON
+    if (musicOn) {
+      bgMusic.play()
+        .then(() => {
+          fadeTo(TARGET_VOLUME);
+        })
+        .catch(err => console.log("Track switch failed:", err));
+    }
+    
+    console.log(`🎵 Track changed to: ${newPath}, Music is: ${musicOn ? "ON" : "OFF"}`);
+  }
+
   // --- Game control API ---
   function stopMusicForGame() {
     if (bgMusic) localStorage.setItem("musicTime", bgMusic.currentTime);
@@ -115,6 +149,28 @@
     }
   }
 
+  // --- CRITICAL FIX: Hard stop function for game over ---
+  function stopMusicHard() {
+    console.log("🔇 Hard stopping all music");
+    
+    // Clear any fade timers immediately
+    if (fadeTimer) {
+      clearInterval(fadeTimer);
+      fadeTimer = null;
+    }
+    
+    // Stop music immediately
+    if (bgMusic) {
+      try {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+        bgMusic.volume = 0; // Set volume to 0 immediately
+      } catch (e) {
+        console.error("Error in stopMusicHard:", e);
+      }
+    }
+  }
+
   // --- 🎧 Click & Hover Sound Effects ---
   const clickSound = new Audio("music/single_click.mp3");
   const hoverSound = new Audio("music/hover_click.mp3");
@@ -122,32 +178,34 @@
   hoverSound.volume = 0.4;
 
   function playClick() {
-    clickSound.currentTime = 0;
-    clickSound.play().catch(() => {});
+    try {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(() => {});
+    } catch (e) {}
   }
 
   function playHover() {
-    hoverSound.currentTime = 0;
-    hoverSound.play().catch(() => {});
+    try {
+      hoverSound.currentTime = 0;
+      hoverSound.play().catch(() => {});
+    } catch (e) {}
   }
 
-  // --- Global button + hover sound handler (works on all screens) ---
+  // --- Global button + hover sound handler ---
   document.addEventListener("DOMContentLoaded", () => {
-    // play sounds for existing buttons
     document.querySelectorAll("button").forEach(btn => {
       btn.addEventListener("click", playClick);
       btn.addEventListener("mouseenter", playHover);
     });
 
-    // also handle dynamically added buttons (like in leaderboard)
     document.body.addEventListener("click", e => {
       if (e.target.matches("button")) playClick();
     });
+    
     document.body.addEventListener("mouseenter", e => {
       if (e.target.matches("button")) playHover();
     }, true);
   });
-
 
   // --- Init background music ---
   document.addEventListener("DOMContentLoaded", () => {
@@ -171,9 +229,11 @@
     toggleMusic,
     stopMusicForGame,
     resumeMusicFromMenu,
+    changeTrack,
+    stopMusicHard, // CRITICAL: Export the hard stop function
     isMusicOn: () => musicOn,
     playClick,
     playHover
   };
-  
+
 })();
