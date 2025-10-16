@@ -1,4 +1,4 @@
-/* ===== FONT IMPORTS (keep your font files in same paths) ===== */
+/* ===== FONT IMPORTS ===== */
 /* ===== LOADING SCREEN ===== */
 .loading-overlay {
   position: fixed;
@@ -51,8 +51,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ===== FONT IMPORTS (keep your font files in same paths) ===== */
-/* rest of your existing CSS continues here */
 @font-face {
   font-family: 'SuperPixel';
   src: url('./fonts/super-pixel-font/SuperPixel-m2L8j.ttf') format('truetype');
@@ -219,7 +217,7 @@ html, body {
   display: none;
   position: absolute;
   left: 50%;
-  top: calc(50% + 170px);
+  top: calc(50% + 220px);
   transform: translateX(-50%);
   z-index: 2;
   gap: 10px;
